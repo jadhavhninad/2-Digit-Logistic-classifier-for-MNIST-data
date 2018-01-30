@@ -130,8 +130,8 @@ def main():
     # compute the accuracy for training set and testing set
     train_Pred = classify(train_data,w,b)
     test_Pred = classify(test_data,w,b)
-    trAcc = 100 - np.mean(np.abs(train_Pred - train_label)*100)
-    teAcc = 100 - np.mean(np.abs(test_Pred - test_label)*100)
+    trAcc = 100 - np.mean((np.abs(train_Pred - train_label)*100)/train_Pred.shape[1])
+    teAcc = 100 - np.mean((np.abs(test_Pred - test_label)*100)/train_Pred.shape[1])
     print("Accuracy for training set is {} %".format(trAcc))
     print("Accuracy for testing set is {} %".format(teAcc))
     plt.plot(costs)
