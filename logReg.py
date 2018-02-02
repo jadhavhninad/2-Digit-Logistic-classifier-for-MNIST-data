@@ -5,7 +5,11 @@ Arguments:
     None
 Returns:
     None
+
+PYTHON VERSION: 3.5.3
+
 '''
+
 import numpy as np
 from read_dataset import mnist
 import pdb
@@ -82,6 +86,8 @@ def optimizer(X, Y, w, b, learning_rate, num_iterations):
         if ii % 100 == 0:
             print("Cost at iteration %i is: %f" %(ii, cost))
  
+    #print("w = ",w)
+    #print("b = ",b)
     parameters = {"w": w, "b": b}
     return parameters, gradients, costs
 
@@ -99,13 +105,14 @@ def classify(X, w, b):
     '''
     scores = np.dot(w.T, X) + b
     A = sigmoid(scores)
+    print(A.shape)
     YPred = np.zeros((1,X.shape[1]))
     
-    for i in range(A.shape[0]):
+    for i in range(A.shape[1]):
         if A[0,i] >= 0.5:
             YPred[0,i] = 1
         else:
-            YPred[0,i] = 0 
+            YPred[0,i] = 0
 
     return YPred
 
@@ -130,13 +137,19 @@ def main():
     # compute the accuracy for training set and testing set
     train_Pred = classify(train_data,w,b)
     test_Pred = classify(test_data,w,b)
-    trAcc = 100 - np.mean((np.abs(train_Pred - train_label)*100)/train_Pred.shape[1])
-    teAcc = 100 - np.mean((np.abs(test_Pred - test_label)*100)/train_Pred.shape[1])
+
+    #print(train_label.shape)
+    #print(np.sum(train_Pred == train_label))
+    #np.sum((np.abs(train_Pred == train_label))) / train_Pred.shape[1]
+    #np.sum((np.abs(test_Pred == test_label))) / train_Pred.shape[1]
+
+    trAcc = 100 - (np.sum((np.abs(train_Pred - train_label)))/train_Pred.shape[1])*100
+    teAcc = 100 - (np.sum((np.abs(test_Pred - test_label)))/train_Pred.shape[1])*100
     print("Accuracy for training set is {} %".format(trAcc))
     print("Accuracy for testing set is {} %".format(teAcc))
     plt.plot(costs)
-    plt.xlabel('error')
-    plt.ylabel('iterations')
+    plt.xlabel('iteration')
+    plt.ylabel('error')
     plt.savefig('error_plot.png')
 
 if __name__ == "__main__":
